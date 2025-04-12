@@ -3,6 +3,8 @@ using aprendizahem.Dtos.Stock;
 using aprendizahem.Mappers;
 using aprendizahem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Completion;
+using Microsoft.Extensions.Options;
 
 namespace aprendizahem.Controllers
 {
@@ -44,6 +46,26 @@ namespace aprendizahem.Controllers
             _context.Stock.Add(StockModel);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new {id = StockModel.Id}, StockModel.ToStockDto());
+        }
+
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto stockDto)
+        {
+           var stockModel = _context.Stock.FirstOrDefault(item => item.Id == id);
+           if (stockModel == null) { return NotFound(); }
+
+            stockModel.Symbol = stockDto.Symbol;
+            stockModel.CompanyName = stockDto.CompanyName;
+            stockModel.Purchase = stockDto.Purchase;
+            stockModel.Dividend = stockDto.Dividend;
+            stockModel.MarketCap = stockDto.MarketCap;
+            stockModel.Industry = stockDto.Industry;
+
+            _context.SaveChanges();
+            return Ok(stockModel.ToStockDto);
+           
         }
     }
 }

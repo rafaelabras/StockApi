@@ -33,6 +33,5 @@ namespace aprendizahem.Mappers
                 MarketCap = StockDt.MarketCap
             }; 
         }
-
     }
 }
