@@ -1,0 +1,65 @@
+
+## Build
+bin/
+obj/
+out/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## ASP.NET Core publish
+publish/
+wwwroot/dist/
+wwwroot/node_modules/
+
+## Logs & Temp
+*.log
+*.tmp
+*.temp
+
+## Rider
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+
+## Test Results
+TestResults/
+*.coverage
+*.coveragexml
+*.codecoverage
+
+## ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+## Backup files
+*.bak
+*.old
+*.orig
+
+## Local config
+*.local.json
+appsettings.json
+appsettings.Development.json
+
+
+## Node (se você usar JS/CSS/webpack no projeto)
+node_modules/
+
+## Sistema
+Thumbs.db
+Desktop.ini
