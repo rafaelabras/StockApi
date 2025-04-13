@@ -67,5 +67,18 @@ namespace aprendizahem.Controllers
             return Ok(stockModel.ToStockDto);
            
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var deleteStock = _context.Stock.FirstOrDefault(item => item.Id == id);
+            if (deleteStock == null) { return NotFound(); }
+            _context.Stock.Remove(deleteStock);
+            _context.SaveChanges();
+
+            return NoContent();
+            
+         }
     }
 }
