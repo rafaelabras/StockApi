@@ -26,7 +26,7 @@ onde o código parou ate o await, como ficaria o escopo das variáveis? o C# ao 
 ao uma thread ser liberade em um await e depois outra thread retomar sua execução. Outra parte muito interessante do funcionamento de uma State Machine são os awaits, o await basicamente "quebra" a assíncronização em pedaços, e ao realizar cada etapa e ao criar a propriedade
 "State" dentro da state machine é possível entender em qual await a State Machine está, atualizando o valor de STATE para retornar a execução no ponto certo. Aqui vai um trecho de código para compreender melhor de forma simplificada:
 
-switch (state)
+       switch (state)
         {
             case 0:
                 resultado1 = await Tarefa1(); 
@@ -34,9 +34,11 @@ switch (state)
                 return; 
 
             case 1:
+
                 resultado2 = await Tarefa2(); 
                 Console.WriteLine($"Resultado Final: {resultado1 + resultado2}");
                 break;
         }
+
 o fluxo é algo parecido com isso para saber onde o código parou, não sei se é absoluto porem percebi que quando há apenas um await no código é utilizado um IF statement ao invés do Switch Case como no caso q demonstrei.
 

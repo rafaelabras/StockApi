@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Comments\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
