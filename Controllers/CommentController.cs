@@ -22,5 +22,17 @@ namespace aprendizahem.Controllers
             var commentDto = comments.Select(x => x.ToCommentDto());
             return Ok(commentDto);
         }
+
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetById([FromRoute]int id)
+        {
+            var comment = await _CommentRepo.GetByIdAsync(id);
+            if (comment == null) { return NotFound(); }
+            return Ok(comment.ToCommentDto());
+        }
+
+
     }
 }

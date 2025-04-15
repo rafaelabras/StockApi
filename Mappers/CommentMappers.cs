@@ -6,7 +6,7 @@ namespace aprendizahem.Mappers
     public static class CommentMappers
     {
 
-        public static CommentDto ToCommentDto(Comment comment)
+        public static CommentDto ToCommentDto(this Comment comment)
         {
             return new CommentDto
             {

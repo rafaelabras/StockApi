@@ -16,7 +16,8 @@ namespace aprendizahem.Mappers
                 Purchase = stockModel.Purchase,
                 Dividend = stockModel.Dividend,
                 Industry = stockModel.Industry,
-                MarketCap = stockModel.MarketCap
+                MarketCap = stockModel.MarketCap,
+                Comments = stockModel.Comments.Select(x => x.ToCommentDto()).ToList()
             };
 
         }

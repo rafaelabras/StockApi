@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using aprendizahem.Dtos.Comments;
+using aprendizahem.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace aprendizahem.Dtos.Stock
 {
@@ -11,5 +13,7 @@ namespace aprendizahem.Dtos.Stock
         public decimal Dividend { get; set; }
         public string Industry { get; set; } = string.Empty;
         public long MarketCap { get; set; }
+
+        public List<CommentDto> Comments { get; set; } 
     }
 }
