@@ -2,6 +2,8 @@ using aprendizahem.Controllers;
 using aprendizahem.Data;
 using System.Data.SqlTypes;
 using Microsoft.EntityFrameworkCore;
+using aprendizahem.Interfaces;
+using aprendizahem.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+
 var app = builder.Build();
 
 
