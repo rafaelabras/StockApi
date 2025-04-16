@@ -19,6 +19,25 @@ namespace aprendizahem.Mappers
 
         }
 
+        public static Comment ToCommentFromCreate(this CreateCommentDto comment, int stockid)
+        {
+            return new Comment
+            {
+                Title = comment.Title,
+                Content = comment.Content,
+                StockId = stockid
+            };
+
+        }
+        public static Comment ToCommentFromUpdate(this UpdateCommentRequestDto comment)
+        {
+            return new Comment
+            {
+                Title = comment.Title,
+                Content = comment.Content,
+            };
+        }
+
 
     }
 }

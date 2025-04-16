@@ -1,4 +1,5 @@
-﻿using aprendizahem.Models;
+﻿using aprendizahem.Dtos.Comments;
+using aprendizahem.Models;
 
 namespace aprendizahem.Interfaces
 {
@@ -6,6 +7,8 @@ namespace aprendizahem.Interfaces
     {
         Task<List<Comment>> GetAllAsync();
         Task<Comment> GetByIdAsync(int id);
-
+        Task<Comment> PostCommentAsync(Comment comment);
+        Task<Comment?> UpdateAsync(Comment comment, int id);
+        Task<Comment?> Delete(int id);
     }
 }
