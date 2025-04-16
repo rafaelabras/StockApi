@@ -23,6 +23,9 @@ namespace aprendizahem.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var comments = await _CommentRepo.GetAllAsync();
             var commentDto = comments.Select(x => x.ToCommentDto());
             return Ok(commentDto);
@@ -30,18 +33,24 @@ namespace aprendizahem.Controllers
 
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute]int id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var comment = await _CommentRepo.GetByIdAsync(id);
             if (comment == null) { return NotFound(); }
             return Ok(comment.ToCommentDto());
         }
 
         [HttpPost]
-        [Route("{stockid}")]
+        [Route("{stockid:int}")]
         public async Task<IActionResult> PostComment([FromRoute] int stockid,[FromBody]CreateCommentDto createdcomment)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (!await _StockRepo.StockExists(stockid))
             {
                 return BadRequest("Stock não existe");
@@ -53,9 +62,12 @@ namespace aprendizahem.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromBody] UpdateCommentRequestDto UpdateCommentDto, [FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var comment = await _CommentRepo.UpdateAsync(UpdateCommentDto.ToCommentFromUpdate(), id);
 
             if (comment == null) { return NotFound("Comentario não encontrado"); }
@@ -65,10 +77,11 @@ namespace aprendizahem.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
 
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+
             var comment = _CommentRepo.DeleteAsync(id);
             if(comment == null) { return NotFound("Comentario não existe"); }
             return Ok();

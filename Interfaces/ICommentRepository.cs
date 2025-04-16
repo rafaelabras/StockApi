@@ -9,6 +9,6 @@ namespace aprendizahem.Interfaces
         Task<Comment> GetByIdAsync(int id);
         Task<Comment> PostCommentAsync(Comment comment);
         Task<Comment?> UpdateAsync(Comment comment, int id);
-        Task<Comment?> Delete(int id);
+        Task<Comment?> DeleteAsync(int id);
     }
 }
