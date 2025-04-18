@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using aprendizahem.Interfaces;
 using aprendizahem.Repository;
 using Microsoft.OpenApi.Models;
+using aprendizahem.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +38,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddIdentity<AppUser, IdentityRole>(op =>
+{
+    op.Password.RequireDigit = true;
+    op.Password.RequireLowercase = true;
+    op.Password.RequireUppercase = true;
+    op.Password.RequireNonAlphanumeric = true;
+    op.Password.RequiredLength = 5;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddAuthentication(op =>
+{
+    op.DefaultAuthenticateScheme =
+    op.DefaultChallengeScheme =
+    op.DefaultForbidScheme =
+    op.DefaultScheme = 
+    op.DefaultSignInScheme =
+    op.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(op =>
+{
+    op.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+            )
+    };
+});
+
+
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
@@ -53,6 +91,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

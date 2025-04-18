@@ -1,5 +1,6 @@
 ﻿using aprendizahem.Data;
 using aprendizahem.Dtos.Stock;
+using aprendizahem.Helpers;
 using aprendizahem.Interfaces;
 using aprendizahem.Mappers;
 using aprendizahem.Models;
@@ -23,12 +24,12 @@ namespace aprendizahem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var stocks = await _stockrepo.GetAllAsync();
+            var stocks = await _stockrepo.GetAllAsync(query);
                 
             var stockDto = stocks.Select(s => s.ToStockDto());
             return Ok(stockDto);

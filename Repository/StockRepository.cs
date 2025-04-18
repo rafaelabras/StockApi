@@ -1,5 +1,6 @@
 ﻿using aprendizahem.Data;
 using aprendizahem.Dtos.Stock;
+using aprendizahem.Helpers;
 using aprendizahem.Interfaces;
 using aprendizahem.Mappers;
 using aprendizahem.Models;
@@ -38,9 +39,36 @@ namespace aprendizahem.Repository
             return stockModel;
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            return await _context.Stock.Include(c => c.Comments).ToListAsync();
+            var stock = _context.Stock.Include(c => c.Comments).AsQueryable();
+
+            if (!string.IsNullOrEmpty(query.CompanyName))
+            {
+                stock = stock.Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
+
+            
+
+            if (!string.IsNullOrEmpty(query.Symbol))
+            {
+                stock = stock.Where(s => s.Symbol.Contains(query.Symbol));
+            }
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                {
+                    stock = query.IsDescending ? stock.OrderByDescending(s => s.Symbol) : stock.OrderBy(s => s.Symbol);
+                }
+            }
+
+            var SkipNumber = (query.PageNumber - 1) * query.PageSize;
+          
+            if(query.PageNumber == 0) { return null;}
+
+            return await stock.Skip(SkipNumber).Take(query.PageSize).ToListAsync();
+
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
