@@ -76,6 +76,11 @@ namespace aprendizahem.Repository
             return await _context.Stock.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public async Task<Stock?> GetBySymbolAsync(string symbol)
+        {
+            return await _context.Stock.FirstOrDefaultAsync(x => x.Symbol == symbol);
+        }
+
         public async Task<bool> StockExists(int id)
         {
             return await _context.Stock.AnyAsync(x => x.Id == id);

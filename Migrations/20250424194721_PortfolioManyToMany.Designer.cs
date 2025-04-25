@@ -12,8 +12,8 @@ using aprendizahem.Data;
 namespace aprendizahem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250418160751_SeedRoles")]
-    partial class SeedRoles
+    [Migration("20250424194721_PortfolioManyToMany")]
+    partial class PortfolioManyToMany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,6 +266,21 @@ namespace aprendizahem.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("aprendizahem.Models.Portfolio", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "StockId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("Portfolio");
+                });
+
             modelBuilder.Entity("aprendizahem.Models.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -297,7 +312,7 @@ namespace aprendizahem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stock");
+                    b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,9 +375,35 @@ namespace aprendizahem.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("aprendizahem.Models.Portfolio", b =>
+                {
+                    b.HasOne("aprendizahem.Models.AppUser", "AppUser")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("aprendizahem.Models.Stock", "Stock")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("aprendizahem.Models.AppUser", b =>
+                {
+                    b.Navigation("Portfolios");
+                });
+
             modelBuilder.Entity("aprendizahem.Models.Stock", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

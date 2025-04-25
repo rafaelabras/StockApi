@@ -1,5 +1,8 @@
-﻿namespace aprendizahem.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace aprendizahem.Models
 {
+    [Table("Comments")]
     public class Comment
     {
         public int Id { get; set; }
