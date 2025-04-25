@@ -21,6 +21,17 @@ namespace aprendizahem.Repository
             return portfolio;
         }
 
+        public async Task<Portfolio> DeletePortfolioAsync(AppUser user, string symbol)
+        {
+            var portfoliomodel = await _context.Portfolios.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.Stock.Symbol.ToLower() == symbol.ToLower());
+            if (portfoliomodel == null)
+                return null;
+
+            _context.Portfolios.Remove(portfoliomodel);
+            await _context.SaveChangesAsync();
+            return portfoliomodel;
+        }
+
         public async Task<List<Stock>> GetUserPortfolio(AppUser user)
         {
             return await _context.Portfolios.Where(u => u.AppUserId == user.Id)

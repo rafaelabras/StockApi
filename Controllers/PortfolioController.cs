@@ -4,6 +4,7 @@ using aprendizahem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Model;
 
 namespace aprendizahem.Controllers
 {
@@ -61,6 +62,24 @@ namespace aprendizahem.Controllers
                 return Created();
 
         }
-        
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> PortfolioDelete(string symbol)
+        {
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+
+            var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
+            var filtered = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
+
+            if (filtered.Count() == 1)
+                await _portfolioRepository.DeletePortfolioAsync(appUser, symbol);
+            else
+                return BadRequest("Stock nao esta no seu portfolio");
+
+            return Ok();
+
+        }
     }
 }
