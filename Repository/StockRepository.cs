@@ -41,7 +41,7 @@ namespace aprendizahem.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            var stock = _context.Stock.Include(c => c.Comments).AsQueryable();
+            var stock = _context.Stock.Include(c => c.Comments).ThenInclude(a => a.appUser).AsQueryable();
 
             if (!string.IsNullOrEmpty(query.CompanyName))
             {

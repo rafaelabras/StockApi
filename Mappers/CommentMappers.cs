@@ -14,6 +14,7 @@ namespace aprendizahem.Mappers
                 Title = comment.Title,
                 Content = comment.Content,
                 CreatedOn = comment.CreatedOn,
+                CreatedBy = comment.appUser.UserName,
                 StockId = comment.StockId
             };
 

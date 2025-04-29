@@ -1,7 +1,9 @@
 ﻿using aprendizahem.Dtos.Comments;
+using aprendizahem.Extension;
 using aprendizahem.Interfaces;
 using aprendizahem.Mappers;
 using aprendizahem.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -14,10 +16,12 @@ namespace aprendizahem.Controllers
 
         private readonly ICommentRepository _CommentRepo;
         private readonly IStockRepository _StockRepo;
-        public CommentController(ICommentRepository commentrepo, IStockRepository stockRepo)
+        private readonly UserManager<AppUser> _UserManager;
+        public CommentController(ICommentRepository commentrepo, IStockRepository stockRepo, UserManager<AppUser> usermanager)
         {
             _CommentRepo = commentrepo;
             _StockRepo = stockRepo;
+            _UserManager = usermanager;
         }
 
         [HttpGet]
@@ -56,7 +60,11 @@ namespace aprendizahem.Controllers
                 return BadRequest("Stock não existe");
             }
 
+            var username = User.GetUsername();
+            var appuser = await _UserManager.FindByNameAsync(username);
+
             var commentModel = createdcomment.ToCommentFromCreate(stockid);
+            commentModel.AppUserId = appuser.Id;
             await _CommentRepo.PostCommentAsync(commentModel);
             return CreatedAtAction(nameof(GetById), new {id = commentModel.Id }, commentModel.ToCommentDto());
         }

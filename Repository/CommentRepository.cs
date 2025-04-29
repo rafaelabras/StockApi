@@ -26,16 +26,17 @@ namespace aprendizahem.Repository
 
         public async Task<List<Comment>> GetAllAsync()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.Include(x => x.appUser).ToListAsync();
         }
 
         public async Task<Comment> GetByIdAsync(int id)
         {
-            return await _context.Comments.FindAsync(id);
+            return await _context.Comments.Include(x => x.appUser).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Comment> PostCommentAsync(Comment addComment)
         {
+
             await _context.Comments.AddAsync(addComment);
             await _context.SaveChangesAsync();
             return addComment;
