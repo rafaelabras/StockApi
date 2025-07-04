@@ -113,6 +113,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+builder.WebHost.UseUrls("http://0.0.0.0:5098");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

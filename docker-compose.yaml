@@ -1,0 +1,64 @@
+## ESSE DOCKER COMPOSE DEVE ESTAR NA MESMA ESTRUTURA DE PASTA DO PROJETO PRINCIPAL (o padrão é esse) então caso clone mova esse dockercompose.
+networks:
+   network_app:
+     driver: bridge
+
+services:
+  devmatch:
+     build: 
+       context: ./aprendizahem
+       dockerfile: Dockerfile
+     volumes:
+       - type: bind
+         source: ./aprendizahem
+         target: /app
+     ports:
+      - 8080:5098
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_URLS=http://+:5098
+       - ConnectionStrings__DefaultConnection=Server=sql_server;Database=DevMatchDb;User Id=sa;Password=testeDockerCompose123;TrustServerCertificate=True;
+     networks:
+       - network_app       
+  
+  sql_server: 
+   image: mcr.microsoft.com/mssql/server:2022-latest
+   ports: 
+     - 1433:1433
+   environment:
+    - "ACCEPT_EULA=Y"
+    - "MSSQL_SA_PASSWORD=testeDockerCompose123"
+   volumes:
+    - sqlapp:/var/opt/mssql
+   networks:
+     - network_app    
+
+  migrations:
+   build:
+     context: ./aprendizahem
+     dockerfile: Dockerfile
+   networks:
+     - network_app 
+   depends_on:
+     - sql_server
+   entrypoint: dotnet
+   command: ef database update
+   environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_URLS=http://+:5098
+       - ConnectionStrings__DefaultConnection=Server=sql_server;Database=DevMatchDb;User Id=sa;Password=testeDockerCompose123;TrustServerCertificate=True;
+
+
+    
+volumes:
+  sqlapp:
+
+
+
+    
+
+
+
+
+       
+     
